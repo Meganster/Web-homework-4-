@@ -39,9 +39,9 @@ def registration(request):
 
 def index(request):
     questions = Question.objects.all()
-    #questions_for_render = paginate(questions, request)
+    questions_for_render = paginate(questions, request)
     return render(request, 'index.html', {
-        'objects': questions,
+        'objects': questions_for_render,
     })
 
 
