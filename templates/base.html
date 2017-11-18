@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Site like Stackoverflow">
+    <meta name="author" content="yury">
+    <link rel="icon" href="/img/favicon.ico">
+
+    <title>Stack Questions</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/index-login.css" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+    <link href="/css/starter-template.css" rel="stylesheet">
+    <link href="/css/poptags-template.css" rel="stylesheet">
+    <link href="/css/question-answer.css" rel="stylesheet">
+    <link href="/css/pagination.css" rel="stylesheet">
+</head>
+
+<body>
+<!--Описание шапки для страницы-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            {% block nav-collapse %}
+            {% endblock %}
+        </div>
+    </div>
+</nav>
+<p></p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% block content %}
+            {% endblock %}
+
+            {% block pagination %}
+            {% endblock %}
+        </div><!-- col-md-8 -->
+
+        <!-- правый столбец -->
+        <div class="col-md-4">
+            <div class="right-block">
+                {% block right-column %}
+                {% endblock %}
+            </div>
+        </div><!-- /.col-md-4 -->
+    </div>
+</div><!-- /.container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
