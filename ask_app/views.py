@@ -1,7 +1,9 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Question
+import collections
+
+from .models import *
 
 questionsObject = []
 
@@ -22,7 +24,6 @@ for i in range(1, 21):
         'title': 'title ' + str(i),
         'text': 'text ' + str(i),
     })
-
 
 
 def settings(request):
@@ -46,24 +47,30 @@ def index(request):
 
 
 def indexlog(request):
-    questions_for_render = paginate(questionsObject, request)
+    questions = Question.objects.all()
+    questions_for_render = paginate(questions, request)
     return render(request, 'indexlog.html', {
         'objects': questions_for_render,
     })
 
 
-def tag(request, num=1):
+def tag(request, name=1):
     questions_for_render = paginate(questionsObject, request)
     return render(request, 'tag.html', {
         'objects': questions_for_render,
     })
 
 
-def question(request, num=1):
-    answers = paginate(answersObject, request)
-    return render(request, 'question.html', {
-        'answers': answers,
-    })
+def question(request, id):
+    main_question = Question.objects.get(id=int(id))
+    answers = Answer.objects.filter(question=int(id))
+    #if isinstance(answers, collections.Iterable):
+    answers_for_render = paginate(answers, request)
+    context = {'question': main_question, 'answers': answers_for_render}
+    return render(request, 'question.html', context)
+    #else:
+    #    context = {'question': main_question, 'answers': answers}
+     #   return render(request, 'question.html', context)
 
 
 def ask(request):

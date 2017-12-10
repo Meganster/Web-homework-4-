@@ -2,36 +2,46 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-#abstractuser вместо user???
-class UserProfile(User):
-    def create_user(self, username, password, email):
-        user = User.objects.get_by_natural_key(username)
 
-        if user is None:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user_profile = UserProfile(user=user)
-            user_profile.save()
-        else:
-            RuntimeError("This username has already been used")
+class UserProfile(AbstractUser):
+    def name(self):
+        return self.first_name + " " + self.last_name
 
-    def get_by_natural_key(self, username):
-        user = User.objects.get_by_natural_key(username)
-        return user
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name=u'Тег')
     questions = models.ManyToManyField('Question')
 
 
-class Like(models.Model):
+class LikeQuestion(models.Model):
     author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     like_date_time = models.DateTimeField(auto_now_add=True)
     like_target_question = models.ForeignKey('Question', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('author', 'like_target_question',)
+
+
+class LikeAnswer(models.Model):
+    author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    like_date_time = models.DateTimeField(auto_now_add=True)
     like_target_answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
-    #unique lkz 3 gjktq
+
+    class Meta:
+        unique_together = ('author', 'like_target_answer',)
+
+
+#class Like(models.Model):
+#    author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+#    like_date_time = models.DateTimeField(auto_now_add=True)
+#    like_target_question = models.ForeignKey('Question', on_delete=models.CASCADE)
+#    like_target_answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    #unique для 3 полей
     #две модели лайков для вопросов и ответов
     #две связи к вопросу и к ответу одна из них нулл
 
