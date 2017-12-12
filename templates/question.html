@@ -14,7 +14,7 @@
         <div class="main-question">
             <div class="row">
                 <div class="col-xs-8 col-sm-1" style="padding: 0px; margin-top: 3px">
-                    <img src="/img/sign-question-icon.png" alt="Question1" height="100" width="100" class="img-thumbnail">
+                    <img src="/img/avatar3.jpg" alt="Question1" height="100" width="100" class="img-thumbnail">
                 </div>
 
                 <div class="col-xs-4 col-sm-11" style="padding-left: 10px; margin-left: 0px; padding-right: 0px;">
@@ -30,8 +30,14 @@
                     <div class="row" style="margin-top: 20px; margin-bottom: 10px">
                         <div class="col-xs-8 col-sm-6">
                             <div class="main-answers-and-tags">
-                                <span>Tags:</span>
-                                <a href="#mvc">MVC</a> <a href="#overflow">Overflow</a>
+                            {% if question.tags %}
+                                <span class="tags">Tags:</span>
+                                {% for tag in question.tags %}
+                                    <a href="{% url 'tag' tag.name %}">{{ tag.name }}</a>
+                                {% endfor %}
+                            {% else %}
+                                <span class="tags">No tags</span>
+                            {% endif %}
                             </div>
                         </div>
 
@@ -41,7 +47,7 @@
                                                                          height="18" width="18" class="img-rounded">
                                 </button>
                                 <button class="btn btn-link btn-sm" disabled="disabled"
-                                        style="color: #00FF00; font-size: 12pt;">+28
+                                        style="color: #00FF00; font-size: 12pt;">{{ question.likes }}
                                 </button>
                                 <button class="btn btn-link btn-sm"><img src="/img/like.png" alt="Dislike icons" height="18"
                                                                          width="18" class="img-rounded"></button>
@@ -59,8 +65,9 @@
             </div>
             <div class="col-xs-4 col-sm-10" style="padding-left: 0px; margin-left: 0px; padding-right: 0px;">
                 <dl>
-                    <dt class="headlines-answer-question">
-                        Answer on {{ item.create_date }}
+                    <!--dt class="headlines-answer-question"-->
+                    <dt>
+                        {{ item.create_date }}
                     </dt>
                     <dd>
                         {{ item.text }}

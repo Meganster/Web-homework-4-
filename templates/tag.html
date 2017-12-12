@@ -21,7 +21,7 @@
             <div class="col-xs-4 col-sm-10 col-question">
                 <dl>
                     <dt class="headlines-answer-question">
-                        <a href="{% url 'question' %}{{ item.id }}/">{{ item.title }}</a>
+                        <a href="{% url 'question' item.id %}">{{ item.title }}</a>
                     </dt>
                     <dd>
                         {{ item.text }}
@@ -31,10 +31,16 @@
                 <div class="row tags-like-dislike">
                     <div class="col-xs-8 col-sm-6">
                         <div class="main-answers-and-tags">
-                            <a href="/question.html">Answers 5</a>
-                            <span class="tags">Tags:</span>
-                            <a href="#mvc">MVC</a>
-                            <a href="#overflow">Overflow</a>
+                            <a href="{% url 'question' item.id %}">Answers 5</a>
+                            {% if item.tags %}
+                                <span class="tags">Tags:</span>
+                                {% for tag in item.tags %}
+                                    <a href="{% url 'tag' tag.name %}">{{ tag.name }}</a>
+                                    <!--a href="{ url 'tag' item.tagTwo %}">{ item.tagTwo }}</a-->
+                                {% endfor %}
+                            {% else %}
+                                <span class="tags">No tags</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -43,7 +49,7 @@
                             <button class="btn btn-link btn-sm"><img src="/img/dislike.png" alt="Dislike icons"
                                                                      height="18" width="18" class="img-rounded">
                             </button>
-                            <button class="btn btn-link btn-sm green-mark count-like" disabled="disabled">+1</button>
+                            <button class="btn btn-link btn-sm green-mark count-like" disabled="disabled">{{ item.likes }}</button>
                             <button class="btn btn-link btn-sm"><img src="/img/like.png" alt="Dislike icons" height="18"
                                                                      width="18" class="img-rounded"></button>
                         </div>

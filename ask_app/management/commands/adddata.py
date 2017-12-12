@@ -83,11 +83,11 @@ class Command(BaseCommand):
         #    create_question(i)
 
         #for i in range(1, max_const):
-        #    create_answer(i, i)
+        #    create_answer(i + 200, i + 50)
 
         #for i in range(1, max_const):
         #    create_tag(i)
 
         for i in range(1, max_const):
-            create_like_answer(i%10 + 20, i%50 + 1)
-            create_like_question(i%10 + 20, i%50 + 1)
+            create_like_answer(i + 10, i + 40)
+            create_like_question(i + 10, i + 40)
