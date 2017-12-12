@@ -11,25 +11,25 @@
 {% load static %}
 
 {% block content %}
-        <div class="main-question">
-            <div class="row">
-                <div class="col-xs-8 col-sm-1" style="padding: 0px; margin-top: 3px">
-                    <img src="/img/avatar3.jpg" alt="Question1" height="100" width="100" class="img-thumbnail">
-                </div>
+    <div class="main-question">
+        <div class="row">
+            <div class="col-xs-8 col-sm-1" style="padding: 0px; margin-top: 3px">
+                <img src="/img/avatar3.jpg" alt="Question1" height="100" width="100" class="img-thumbnail">
+            </div>
 
-                <div class="col-xs-4 col-sm-11" style="padding-left: 10px; margin-left: 0px; padding-right: 0px;">
-                    <dl>
-                        <dt class="headlines-answer-question">
-                            <a href="{% url 'question' question.id %}"> {{ question.title }} </a>
-                        </dt>
-                        <dd>
-                            {{ question.text }}
-                        </dd>
-                    </dl>
+            <div class="col-xs-4 col-sm-11" style="padding-left: 10px; margin-left: 0px; padding-right: 0px;">
+                <dl>
+                    <dt class="headlines-answer-question">
+                        <a href="{% url 'question' question.id %}"> {{ question.title }} </a>
+                    </dt>
+                    <dd>
+                        {{ question.text }}
+                    </dd>
+                </dl>
 
-                    <div class="row" style="margin-top: 20px; margin-bottom: 10px">
-                        <div class="col-xs-8 col-sm-6">
-                            <div class="main-answers-and-tags">
+                <div class="row" style="margin-top: 20px; margin-bottom: 10px">
+                    <div class="col-xs-8 col-sm-6">
+                        <div class="main-answers-and-tags">
                             {% if question.tags %}
                                 <span class="tags">Tags:</span>
                                 {% for tag in question.tags %}
@@ -38,25 +38,25 @@
                             {% else %}
                                 <span class="tags">No tags</span>
                             {% endif %}
-                            </div>
                         </div>
+                    </div>
 
-                        <div class="col-xs-8 col-sm-6">
-                            <div class="main-btn-group btn-group">
-                                <button class="btn btn-link btn-sm"><img src="/img/dislike.png" alt="Dislike icons"
-                                                                         height="18" width="18" class="img-rounded">
-                                </button>
-                                <button class="btn btn-link btn-sm" disabled="disabled"
-                                        style="color: #00FF00; font-size: 12pt;">{{ question.likes }}
-                                </button>
-                                <button class="btn btn-link btn-sm"><img src="/img/like.png" alt="Dislike icons" height="18"
-                                                                         width="18" class="img-rounded"></button>
-                            </div>
+                    <div class="col-xs-8 col-sm-6">
+                        <div class="main-btn-group btn-group">
+                            <button class="btn btn-link btn-sm"><img src="/img/dislike.png" alt="Dislike icons"
+                                                                     height="18" width="18" class="img-rounded">
+                            </button>
+                            <button class="btn btn-link btn-sm" disabled="disabled"
+                                    style="color: #00FF00; font-size: 12pt;">{{ question.likes }}
+                            </button>
+                            <button class="btn btn-link btn-sm"><img src="/img/like.png" alt="Dislike icons" height="18"
+                                                                     width="18" class="img-rounded"></button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div> <!--main-question -->
+        </div>
+    </div> <!--main-question -->
 
     {% for item in answers %}
         <div class="row question-answer">
@@ -89,10 +89,12 @@
                         <div class="question-answer-btn-group btn-group">
                             <button class="btn btn-link btn-sm">
                                 <!--/.img src={ static "img/dislike.png" %} alt="Dislike icons" height="18" width="18" class="img-rounded" -->
-                                <img src="/img/dislike.png" alt="Dislike icons" height="18" width="18" class="img-rounded">
+                                <img src="/img/dislike.png" alt="Dislike icons" height="18" width="18"
+                                     class="img-rounded">
                             </button>
                             <button class="btn btn-link btn-sm" disabled="disabled"
-                                    style="color: #00FF00; font-size: 12pt;">+2
+                                    style="color: #00FF00; font-size: 12pt;">
+                                {{ item.likes }}
                             </button>
                             <button class="btn btn-link btn-sm">
                                 <!--/.img src={ static "img/like.png" %} alt="Like icons" height="18" width="18" class="img-rounded" -->

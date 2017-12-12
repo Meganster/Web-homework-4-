@@ -64,7 +64,7 @@ def hot(request):
 
 def question(request, id):
     main_question = Question.objects.get_with_tags(id)
-    answers = Answer.objects.filter(question=int(id))
+    answers = Answer.objects.get_with_likes(id)
     answers_for_render = paginate(answers, request)
     context = {'question': main_question, 'answers': answers_for_render}
     return render(request, 'question.html', context)

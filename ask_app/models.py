@@ -99,13 +99,25 @@ class Question(models.Model):
         return "%s: \n\t%s" % (self.title, self.text)
 
 
+class AnswerManager(models.Manager):
+    # выберет все ответы на вопрос с question_id и
+    # добавит к ним лайки
+    def get_with_likes(self, question_id):
+        all_answers = Answer.objects.filter(question=int(question_id))
+        for answer in all_answers:
+            all_likes = LikeAnswer.objects.filter(like_target_answer=answer)
+            answer.likes = len(all_likes)
+        return all_answers
+
 class Answer(models.Model):
     text = models.TextField(verbose_name=u'Тело ответа')
     is_correct = models.BooleanField(default=False)
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     create_date = models.DateField(auto_now_add=True, verbose_name=u'Дата создания')
-    
+
+    objects = AnswerManager()
+
     class Meta:
         verbose_name = 'answer'
         verbose_name_plural = 'answers'
