@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block content %}
-    <p class="tag-for-search">New questions</p>
+    <p class="tag-for-search">
+        <a href="{% url 'index' %}" style="color: black">New questions</a>   <a href="{% url 'hot' %}" style="color: black">Best questions</a>
+    </p>
 
     {% for item in objects %}
         <div class="row question-answer">
@@ -29,15 +31,14 @@
                 <div class="row tags-like-dislike">
                     <div class="col-xs-8 col-sm-6 like-dislike">
                         <div class="main-answers-and-tags">
-                            <a href="{% url 'question' item.id %}">Answers ...</a>
+                            <a href="{% url 'question' item.id %}">Answers {{ item.number_answers }}</a>
                             {% if item.tags %}
                                 <span class="tags">Tags:</span>
                                 {% for tag in item.tags %}
                                     <a href="{% url 'tag' tag.name %}">{{ tag.name }}</a>
-                                    <!--a href="{ url 'tag' item.tagTwo %}">{ item.tagTwo }}</a-->
                                 {% endfor %}
                             {% else %}
-                                <span class="tags">No tags</span>
+                                <span class="tags">Tags: no</span>
                             {% endif %}
                         </div>
                     </div>

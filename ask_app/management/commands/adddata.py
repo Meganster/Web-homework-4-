@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import random
+
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import UserManager
 from ask_app.models import *
@@ -45,23 +47,31 @@ def create_question(user_id):
     print('Successfully fill data for question "%s", "%d"' % (title, user_id))
 
 def create_answer(question_id, user_id):
-    text = fake.sentence()
-    answer1 = Answer(text=text, author=usermanager.get_by_id(user_id), question=Question.objects.get(id=question_id))
+    answer1 = Answer(text=fake.sentence(), author=usermanager.get_by_id(user_id), question=Question.objects.get(id=question_id))
     answer1.save()
-    answer2 = Answer(text=text, author=usermanager.get_by_id(user_id), question=Question.objects.get(id=question_id % 5))
+    answer2 = Answer(text=fake.sentence(), author=usermanager.get_by_id(user_id + 1), question=Question.objects.get(id=question_id))
     answer2.save()
     print('Successfully fill data for answer1 "%d", "%d"' % (question_id, user_id))
-    print('Successfully fill data for answer2 "%d", "%d"' % (question_id % 5, user_id))
+    print('Successfully fill data for answer2 "%d", "%d"' % (question_id, user_id + 1))
 
 def create_tag(question_id):
-    name_tag = fake.words()[0]
-    tag = Tag()
-    tag.name = name_tag
-    tag.save()
-    tag.questions.add(Question.objects.get(id=question_id))
-    tag.questions.add(Question.objects.get(id=question_id + 3))
-    tag.save()
-    print('Successfully fill data for tag "%s", "%d", "%d"' % (name_tag, question_id, question_id + 3))
+    words = fake.words()
+    name_tag1 = words[0]
+    name_tag2 = words[1]
+
+    tag1 = Tag()
+    tag1.name = name_tag1
+    tag1.save()
+    tag1.questions.add(Question.objects.get(id=question_id))
+    #tag.questions.add(Question.objects.get(id=question_id + 3))
+    tag1.save()
+
+    tag2 = Tag()
+    tag2.name = name_tag2
+    tag2.save()
+    tag2.questions.add(Question.objects.get(id=question_id))
+    tag2.save()
+    print('Successfully fill data for tag "%s", "%s", "%d"' % (name_tag1, name_tag2, question_id))
 
 def create_like_answer(answer_id, user_id):
     like_answer = LikeAnswer(like_target_answer=Answer.objects.get(id=answer_id), author=usermanager.get_by_id(user_id))
@@ -69,8 +79,9 @@ def create_like_answer(answer_id, user_id):
     print('Successfully fill data for like_answer "%d", "%d"' % (answer_id, user_id))
 
 def create_like_question(question_id, user_id):
-    like_question = LikeQuestion(like_target_question=Question.objects.get(id=question_id), author=usermanager.get_by_id(user_id))
-    like_question.save();
+    for i in range(user_id, random.randrange(user_id, random.randint(user_id + 1, user_id + 10))):
+        like_question = LikeQuestion(like_target_question=Question.objects.get(id=question_id), author=usermanager.get_by_id(i))
+        like_question.save();
     print('Successfully fill data for like_question "%d", "%d"' % (question_id, user_id))
 
 class Command(BaseCommand):
@@ -86,8 +97,8 @@ class Command(BaseCommand):
         #    create_answer(i + 200, i + 50)
 
         #for i in range(1, max_const):
-        #    create_tag(i)
+        #    create_tag(i + 200)
 
         for i in range(1, max_const):
-            create_like_answer(i + 10, i + 40)
-            create_like_question(i + 10, i + 40)
+        #    create_like_answer(i + 10, i + 40)
+            create_like_question(i + 279, i + 99)

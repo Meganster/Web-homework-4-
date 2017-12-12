@@ -31,12 +31,11 @@
                 <div class="row tags-like-dislike">
                     <div class="col-xs-8 col-sm-6">
                         <div class="main-answers-and-tags">
-                            <a href="{% url 'question' item.id %}">Answers 5</a>
+                            <a href="{% url 'question' item.id %}">Answers {{ item.number_answers }}</a>
                             {% if item.tags %}
                                 <span class="tags">Tags:</span>
                                 {% for tag in item.tags %}
                                     <a href="{% url 'tag' tag.name %}">{{ tag.name }}</a>
-                                    <!--a href="{ url 'tag' item.tagTwo %}">{ item.tagTwo }}</a-->
                                 {% endfor %}
                             {% else %}
                                 <span class="tags">No tags</span>

@@ -1,20 +1,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import collections
-
 from .models import *
-"""
-    questions = Questions.objects.all_with_tags()
-    
-    //all_with_tags:
-        questions = list(Questions.objects.all())
-    for q in questions:
-        tags = list(Tag.objects.filter(question=q))
-        q.tags = tags
-        return questions;
-    
-    """
 
 def settings(request):
     return render(request, 'settings.html')
@@ -47,7 +34,7 @@ def indexlog(request):
 
 
 def tag(request, name):
-    questions = Question.objects.questions_with_tag(name)
+    questions = Question.objects.questions_by_tag(name)
     questions_for_render = paginate(questions, request)
     return render(request, 'tag.html', {
         'objects': questions_for_render,
