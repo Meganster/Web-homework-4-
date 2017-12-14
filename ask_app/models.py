@@ -28,48 +28,51 @@ class Tag(models.Model):
     #две модели лайков для вопросов и ответов
     #две связи к вопросу и к ответу одна из них нулл
 
-def add_likes(all_questions):
-    for question in all_questions:
-        all_likes = LikeQuestion.objects.filter(like_target_question=question)
-        question.likes = len(all_likes)
-    return all_questions
-
-def add_tags(all_questions):
-    for question in all_questions:
-        question_tags = list(Tag.objects.filter(questions__id=int(question.id)))
-        question.tags = question_tags
-    return all_questions
-
-def add_numbers_answers(all_questions):
-    for question in all_questions:
-        all_answers = Answer.objects.filter(question=question)
-        question.number_answers = len(all_answers)
-    return all_questions
-
 
 class QuestionManager(models.Manager):
+    @staticmethod
+    def add_likes(all_questions):
+        for question in all_questions:
+            all_likes = LikeQuestion.objects.filter(like_target_question=question)
+            question.likes = len(all_likes)
+        return all_questions
+
+    @staticmethod
+    def add_tags(all_questions):
+        for question in all_questions:
+            question_tags = list(Tag.objects.filter(questions__id=int(question.id)))
+            question.tags = question_tags
+        return all_questions
+
+    @staticmethod
+    def add_numbers_answers(all_questions):
+        for question in all_questions:
+            all_answers = Answer.objects.filter(question=question)
+            question.number_answers = len(all_answers)
+        return all_questions
+
     # новые вопросы
     def recent_questions(self):
         all_questions = list(super(QuestionManager, self).get_queryset().order_by('-create_date'))
-        add_likes(all_questions)
-        add_tags(all_questions)
-        add_numbers_answers(all_questions)
+        self.add_likes(all_questions)
+        self.add_tags(all_questions)
+        self.add_numbers_answers(all_questions)
         return all_questions
 
     # вопросы по тегу
     def questions_by_tag(self, tag):
         all_questions = Question.objects.filter(tag__name=tag)
-        add_tags(all_questions)
-        add_likes(all_questions)
-        add_numbers_answers(all_questions)
+        self.add_tags(all_questions)
+        self.add_likes(all_questions)
+        self.add_numbers_answers(all_questions)
         return all_questions
 
     # самые популярные вопросы
     def questions_with_high_rating(self):
         all_questions = Question.objects.all()
-        add_likes(all_questions)
-        add_tags(all_questions)
-        add_numbers_answers(all_questions)
+        self.add_likes(all_questions)
+        self.add_tags(all_questions)
+        self.add_numbers_answers(all_questions)
 
         result = list(all_questions)
         result.sort(key=lambda question: question.likes, reverse=True)
@@ -79,8 +82,8 @@ class QuestionManager(models.Manager):
     # добавит к ним теги
     def get_all_with_tags(self):
         all_questions = list(Question.objects.all())
-        add_tags(all_questions)
-        add_likes(all_questions)
+        self.add_tags(all_questions)
+        self.add_likes(all_questions)
         return all_questions
 
     # выберет один вопрос с question_id и
