@@ -11,6 +11,6 @@ urlpatterns = [
                url(r'^question/(?P<id>\d+)$', views.question, name='question'),
                #url(r'^question/', views.question, name='question'),
                url(r'^settings$', views.settings, name='settings'),
-               url(r'^indexlog$', views.indexlog, name='indexlog'),
+               #url(r'^indexlog$', views.indexlog, name='indexlog'),
                url(r'^$', views.index, name='index')
 ]

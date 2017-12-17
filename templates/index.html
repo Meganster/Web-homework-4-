@@ -16,7 +16,7 @@
     {% for item in objects %}
         <div class="row question-answer">
             <div class="col-xs-8 col-sm-2 col-picture">
-                <img src="/img/avatar3.jpg" alt="question1" height="50" width="50" class="img-rounded">
+                <img src="{{ item.author.avatar.url }}" alt="user_photo" height="50" width="50" class="img-rounded">
             </div>
             <div class="col-xs-4 col-sm-10 col-question">
                 <dl>

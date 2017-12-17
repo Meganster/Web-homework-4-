@@ -7,8 +7,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
-class UserProfile(AbstractUser):
-    #avatar = models.ImageField(upload_to='avatar/%Y/%m/%d', null=True, verbose_name='Аватар')
+class UserProfile(User):
+    avatar = models.ImageField(upload_to='avatar/%Y/%m/%d', null=True, verbose_name='Аватар', default='avatar.jpg')
 
     def name(self):
         return self.first_name + " " + self.last_name
@@ -45,6 +45,13 @@ class QuestionManager(models.Manager):
         return all_questions
 
     @staticmethod
+    def add_photo(all_questions):
+        for question in all_questions:
+            author = UserProfile.objects.filter(id=question.author_id)
+            question.author = author
+        return all_questions
+
+    @staticmethod
     def add_numbers_answers(all_questions):
         for question in all_questions:
             all_answers = Answer.objects.filter(question=question)
@@ -54,6 +61,7 @@ class QuestionManager(models.Manager):
     # новые вопросы
     def recent_questions(self):
         all_questions = list(super(QuestionManager, self).get_queryset().order_by('-create_date'))
+        #self.add_photo(all_questions)
         self.add_likes(all_questions)
         self.add_tags(all_questions)
         self.add_numbers_answers(all_questions)
@@ -145,6 +153,7 @@ class LikeQuestion(models.Model):
     author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     like_date_time = models.DateTimeField(auto_now_add=True)
     like_target_question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ('author', 'like_target_question',)
@@ -154,6 +163,7 @@ class LikeAnswer(models.Model):
     author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     like_date_time = models.DateTimeField(auto_now_add=True)
     like_target_answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ('author', 'like_target_answer',)

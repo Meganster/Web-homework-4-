@@ -87,11 +87,11 @@ def create_like_question(question_id, user_id):
 class Command(BaseCommand):
     def handle(self, *args, **options):
         max_const = 100
-        #for i in range(1, max_const):
-        #    create_user()
+        for i in range(1, max_const):
+            create_user()
 
-        #for i in range(1, max_const):
-        #    create_question(i)
+        for i in range(1, max_const):
+            create_question(i)
 
         #for i in range(1, max_const):
         #    create_answer(i + 200, i + 50)
@@ -99,6 +99,6 @@ class Command(BaseCommand):
         #for i in range(1, max_const):
         #    create_tag(i + 200)
 
-        for i in range(1, max_const):
+        #for i in range(1, max_const):
         #    create_like_answer(i + 10, i + 40)
-            create_like_question(i + 279, i + 99)
+        #    create_like_question(i + 279, i + 99)
