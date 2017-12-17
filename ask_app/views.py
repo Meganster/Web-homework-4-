@@ -9,59 +9,47 @@ from ask_app import forms
 from .models import *
 
 def settings(request):
-    return render(request, 'settings.html')
-
-
-def login(request):
-    return render(request, 'login.html')
-
-
-def registration(request):
-    return render(request, 'registration.html')
+    context = _get_user_context(request)
+    return render(request, 'settings.html', context)
 
 
 def index(request):
+    context = _get_user_context(request)
     questions = Question.objects.recent_questions()
     questions_for_render = paginate(questions, request)
-    return render(request, 'index.html', {
-        'objects': questions_for_render,
-    })
-
-
-#def indexlog(request):
-#    questions = Question.objects.all()
-#    questions_for_render = paginate(questions, request)
-#    return render(request, 'indexlog.html', {
-#        'objects': questions_for_render,
-#    })
+    context['objects'] = questions_for_render
+    return render(request, 'index.html', context)
 
 
 def tag(request, name):
+    context = _get_user_context(request)
     questions = Question.objects.questions_by_tag(name)
     questions_for_render = paginate(questions, request)
-    return render(request, 'tag.html', {
-        'objects': questions_for_render,
-    })
+    context['objects'] = questions_for_render
+    return render(request, 'tag.html', context)
 
 
 def hot(request):
+    context = _get_user_context(request)
     questions = Question.objects.questions_with_high_rating()
     questions_for_render = paginate(questions, request)
-    return render(request, 'index.html', {
-        'objects': questions_for_render,
-    })
+    context['objects'] = questions_for_render
+    return render(request, 'index.html', context)
 
 
 def question(request, id):
+    context = _get_user_context(request)
     main_question = Question.objects.get_with_tags(id)
     answers = Answer.objects.get_with_likes(id)
     answers_for_render = paginate(answers, request)
-    context = {'question': main_question, 'answers': answers_for_render}
+    context['question'] = main_question
+    context['answers'] = answers_for_render
     return render(request, 'question.html', context)
 
 
 def ask(request):
-    return render(request, 'ask.html')
+    context = _get_user_context(request)
+    return render(request, 'ask.html', context)
 
 
 def paginate(objects_list, request, page_objects_num=20):
@@ -78,16 +66,18 @@ def paginate(objects_list, request, page_objects_num=20):
         objects_page = paginator.page(paginator.num_pages)
     return objects_page
 
+
 def _get_user_context(request):
     context = {}
     if request.user.is_authenticated():
         context['user_logged_in'] = True
-        context['username'] = request.user.username
+        context['user'] = request.user
     else:
         context['user_logged_in'] = False
     return context
 
-def register(request):
+
+def registration(request):
     context = _get_user_context(request)
     errors = []
     if context['user_logged_in']:
@@ -104,29 +94,30 @@ def register(request):
             if password != confirmpass:
                 errors.append("Пароли не совпадают")
             data = form.data.copy()
-            same = None
+            same_UserProfiles = None
             try:
-                same = UserProfile.objects.get(username=username)
+                same_UserProfiles = UserProfile.objects.get(username=username)
             except UserProfile.DoesNotExist:
                 pass
-            if same:
+            if same_UserProfiles:
                 errors.append("Пользователь с таким именем уже существует")
                 data['username'] = ""
-            same = None
+            same_UserProfiles = None
             try:
-                same = UserProfile.objects.get(email=email)
+                same_UserProfiles = UserProfile.objects.get(email=email)
             except UserProfile.DoesNotExist:
                 pass
-            if same:
+            if same_UserProfiles:
                 errors.append("Пользователь с таким адресом эл. почты уже существует")
                 data['email'] = ""
             form.data = data
             if errors:
-                return render(request, 'register.html', {'form': form,
+                return render(request, 'registration.html', {'form': form,
                               'errors': errors})
             UserProfile.objects.create_user(username=username, email=email, password=password, first_name=firstname, last_name=lastname)
-        return HttpResponseRedirect("/login/")
-    return render(request, 'register.html', {'form': forms.RegistrationForm(), 'errors': []})
+        return HttpResponseRedirect("/login")
+    return render(request, 'registration.html', {'form': forms.RegistrationForm(), 'errors': []})
+
 
 def login(request):
     context = _get_user_context(request)
@@ -147,14 +138,16 @@ def login(request):
                 except UserProfile.DoesNotExist:
                     errors.append("Пользователя с таким именем или адресом эл. почты не существует")
                     return render(request, 'login.html', {'form': form, 'errors': errors})
+
             user_auth = authenticate(username=user.username, password=password)
             if user_auth is not None:
                 l_in(request, user_auth)
-                return HttpResponseRedirect("/success/")
+                return HttpResponseRedirect("/success")
             else:
                 errors.append("Пароль неверен")
                 return render(request, 'login.html', {'form': form, 'errors': errors})
     return render(request, 'login.html', {'form': forms.LoginForm()})
+
 
 def success(request):
     context = _get_user_context(request)
@@ -164,9 +157,10 @@ def success(request):
     else:
         return render(request, 'success.html', {"success": False})
 
+
 def logout(request):
     if request.user.is_authenticated():
         l_out(request)
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/')
     else:
         return HttpResponseRedirect('/')

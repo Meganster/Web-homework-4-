@@ -25,7 +25,7 @@ SECRET_KEY = 'jd9sg^7+pcjk&+5p2vr3vqs(aqbtcc!y80p$4%t5t#p_f&o6ey'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['askvanyashkin.io', '127.0.0.1']
+ALLOWED_HOSTS = ['askvanyashkin.io', '127.0.0.1', 'backend']
 
 
 # Application definition

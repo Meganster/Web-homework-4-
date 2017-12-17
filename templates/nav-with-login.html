@@ -25,18 +25,19 @@
 
     <ul class="nav navbar-nav pull-right">
         <li><a href="{% url 'ask' %}" class="ask" style="color: cornflowerblue">ASK</a></li>
-        <li><img src="{%  static "/img/avatar1.jpg" %}" alt="icons" height="40" width="40" class="img-rounded avatar"></li>
+        {% load static %}
+        <li><img src="{{ user.avatar.url }}" alt="user_avatar" height="40" width="40" class="img-rounded avatar"></li>
 
         <li class="dropdown">
-            <a href="#"
+            <a href=""
                class="dropdown-toggle nickname"
                data-toggle="dropdown">
-                Mr.Freeman
+                {{ user.username }}
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
                 <li><a href="{% url 'settings' %}">Settings</a></li>
-                <li><a href="{% url 'index' %}">Log out</a></li>
+                <li><a href="{% url 'logout' %}">Log out</a></li>
             </ul>
         </li>
     </ul>

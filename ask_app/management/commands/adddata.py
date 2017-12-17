@@ -63,7 +63,6 @@ def create_tag(question_id):
     tag1.name = name_tag1
     tag1.save()
     tag1.questions.add(Question.objects.get(id=question_id))
-    #tag.questions.add(Question.objects.get(id=question_id + 3))
     tag1.save()
 
     tag2 = Tag()
@@ -87,18 +86,18 @@ def create_like_question(question_id, user_id):
 class Command(BaseCommand):
     def handle(self, *args, **options):
         max_const = 100
-        for i in range(1, max_const):
-            create_user()
-
-        for i in range(1, max_const):
-            create_question(i)
+        #for i in range(1, max_const):
+        #    create_user()
 
         #for i in range(1, max_const):
-        #    create_answer(i + 200, i + 50)
+        #    create_question(i)
 
         #for i in range(1, max_const):
-        #    create_tag(i + 200)
+        #    create_answer(i + 00, i + 50)
 
         #for i in range(1, max_const):
-        #    create_like_answer(i + 10, i + 40)
-        #    create_like_question(i + 279, i + 99)
+        #   create_tag(i)
+
+        #for i in range(1, max_const):
+            #create_like_answer(i + 10, i + 40)
+            #create_like_question(i + 4, i + 10)
