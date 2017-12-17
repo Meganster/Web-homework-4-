@@ -45,13 +45,6 @@ class QuestionManager(models.Manager):
         return all_questions
 
     @staticmethod
-    def add_photo(all_questions):
-        for question in all_questions:
-            author = UserProfile.objects.filter(id=question.author_id)
-            question.author = author
-        return all_questions
-
-    @staticmethod
     def add_numbers_answers(all_questions):
         for question in all_questions:
             all_answers = Answer.objects.filter(question=question)
@@ -61,7 +54,6 @@ class QuestionManager(models.Manager):
     # новые вопросы
     def recent_questions(self):
         all_questions = list(super(QuestionManager, self).get_queryset().order_by('-create_date'))
-        #self.add_photo(all_questions)
         self.add_likes(all_questions)
         self.add_tags(all_questions)
         self.add_numbers_answers(all_questions)
